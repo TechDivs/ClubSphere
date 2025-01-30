@@ -16,14 +16,29 @@ const Signup = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
-    if (formData.password !== formData.confirmPassword) {
-      alert('Passwords do not match!');
-      return;
+    try {
+      if (formData.password !== formData.confirmPassword) {
+        alert('Passwords do not match!');
+        return;
+      }
+      // Send POST request to backend
+      const response = await axios.post('http://localhost:3000/api/signup', {
+        rollNo: formData.rollNo,
+        enrollmentNo: formData.enrollmentNo,
+        firstName: formData.firstName,
+        primaryClub: formData.primaryClub,
+        password: formData.password
+      });
+
+      console.log('Signup successful:', response.data);
+      alert('Registration successful!');
+      // Redirect to login or other page
+    } catch (error) {
+      console.error('Signup error:', error.response?.data?.message || error.message);
+      alert(error.response?.data?.message || 'Registration failed');
     }
-    console.log('Signing up with:', formData);
-    // Handle signup logic here
   };
 
   return (

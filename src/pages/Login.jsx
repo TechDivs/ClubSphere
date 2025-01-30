@@ -5,10 +5,27 @@ const Login = () => {
   const [rollNo, setRollNo] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    console.log('Logging in with:', { rollNo, password });
-    // Handle login logic here
+    try {
+      const response = await axios.post('http://localhost:3000/api/login', {
+        rollNo,
+        password
+      });
+
+      // Handle successful login
+      console.log('Login successful:', response.data);
+      // You might want to redirect or store the authentication token here
+    } catch (error) {
+      // Handle error
+      if (error.response) {
+        // The request was made and the server responded with a status code
+        console.error('Login failed:', error.response.data.error);
+      } else {
+        // Something happened in setting up the request
+        console.error('Error:', error.message);
+      }
+    }
   };
 
   return (
